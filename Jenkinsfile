@@ -9,6 +9,18 @@ pipeline {
             }
         }
         
+        stage('Setup Node.js') {
+            steps {
+                echo '📦 Node.js 설치 중...'
+                sh '''
+                    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+                    apt-get install -y nodejs
+                    node --version
+                    npm --version
+                '''
+            }
+        }
+        
         stage('Install Dependencies') {
             steps {
                 echo '📥 의존성 설치 중...'
