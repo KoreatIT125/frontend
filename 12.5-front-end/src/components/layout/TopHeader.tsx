@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { Button } from '../ui/Button'
 
 function titleForPath(pathname: string): { title: string; subtitle: string } {
   if (pathname.startsWith('/events')) {
@@ -26,6 +27,12 @@ export function TopHeader() {
           <p className="mt-1 text-sm text-slate-600">{subtitle}</p>
         </div>
         <div className="hidden items-center gap-3 sm:flex">
+          <Link to="/login">
+            <Button variant="secondary">로그인</Button>
+          </Link>
+          <Link to="/signup">
+            <Button variant="primary">회원가입</Button>
+          </Link>
           <div className="rounded-xl bg-app-bg px-3 py-2 text-xs text-slate-600 ring-1 ring-slate-200">
             <span className="font-semibold text-slate-800">시스템</span> 정상
           </div>
