@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { Button } from '../components/ui/Button'
@@ -10,7 +10,7 @@ export function SignupPage() {
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -18,7 +18,7 @@ export function SignupPage() {
 
   const [errors, setErrors] = useState<{
     name?: string
-    email?: string
+    username?: string
     password?: string
     password2?: string
     agree?: string
@@ -29,9 +29,7 @@ export function SignupPage() {
   const validate = (): boolean => {
     const next: typeof errors = {}
     if (name.trim().length < 2) next.name = '이름은 2자 이상 입력해 주세요.'
-    if (!email.trim()) next.email = '이메일을 입력해 주세요.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      next.email = '올바른 이메일 형식이 아닙니다.'
+    if (!username.trim()) next.username = '아이디를 입력해 주세요.'
     if (!password) next.password = '비밀번호를 입력해 주세요.'
     else if (password.length < 4) next.password = '비밀번호는 4자 이상으로 설정해 주세요.'
     if (password !== password2) next.password2 = '비밀번호가 일치하지 않습니다.'
@@ -40,13 +38,13 @@ export function SignupPage() {
     return Object.keys(next).length === 0
   }
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setSubmitError(null)
     if (!validate()) return
     setSubmitting(true)
     try {
-      await signup({ email, password, name })
+      await signup({ username, password, name })
       navigate('/me', { replace: true })
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : '회원가입에 실패했습니다.')
@@ -87,14 +85,14 @@ export function SignupPage() {
         />
 
         <Input
-          name="email"
-          type="email"
-          autoComplete="email"
-          label="이메일"
-          placeholder="name@petcare.kr"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email}
+          name="username"
+          type="text"
+          autoComplete="username"
+          label="아이디"
+          placeholder="아이디를 입력하세요"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          error={errors.username}
         />
 
         <div className="space-y-1.5">

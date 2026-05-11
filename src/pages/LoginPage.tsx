@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { Button } from '../components/ui/Button'
@@ -6,11 +6,11 @@ import { Input } from '../components/ui/Input'
 import { useAuth } from '../hooks/useAuth'
 
 const SAMPLE_ACCOUNTS = [
-  { email: 'mango@petcare.kr', name: '김민지' },
-  { email: 'junpark@petcare.kr', name: '박서준' },
-  { email: 'sualee@petcare.kr', name: '이수아' },
-  { email: 'doyoun@petcare.kr', name: '최도윤' },
-  { email: 'haneul@petcare.kr', name: '정하늘' },
+  { username: 'mango', name: '김민지' },
+  { username: 'junpark', name: '박서준' },
+  { username: 'sualee', name: '이수아' },
+  { username: 'doyoun', name: '최도윤' },
+  { username: 'haneul', name: '정하늘' },
 ] as const
 
 export function LoginPage() {
@@ -20,31 +20,29 @@ export function LoginPage() {
   const fromPath =
     (location.state as { from?: string } | null)?.from ?? '/me'
 
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+  const [errors, setErrors] = useState<{ username?: string; password?: string }>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const SHOW_SAMPLE_ACCOUNTS = false
 
   const validate = (): boolean => {
     const next: typeof errors = {}
-    if (!email.trim()) next.email = '이메일을 입력해 주세요.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-      next.email = '올바른 이메일 형식이 아닙니다.'
+    if (!username.trim()) next.username = '아이디를 입력해 주세요.'
     if (!password) next.password = '비밀번호를 입력해 주세요.'
     setErrors(next)
     return Object.keys(next).length === 0
   }
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setSubmitError(null)
     if (!validate()) return
     setSubmitting(true)
     try {
-      await login(email, password)
+      await login(username, password)
       navigate(fromPath, { replace: true })
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : '로그인에 실패했습니다.')
@@ -54,7 +52,7 @@ export function LoginPage() {
   }
 
   const fillSample = (sampleEmail: string) => {
-    setEmail(sampleEmail)
+    setUsername(sampleEmail)
     setPassword('pw1234')
     setSubmitError(null)
   }
@@ -84,14 +82,14 @@ export function LoginPage() {
         )}
 
         <Input
-          name="email"
-          type="email"
-          autoComplete="email"
-          label="이메일"
-          placeholder="name@petcare.kr"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email}
+          name="username"
+          type="text"
+          autoComplete="username"
+          label="아이디"
+          placeholder="아이디를 입력하세요"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          error={errors.username}
         />
 
         <div className="space-y-1.5">
@@ -179,12 +177,12 @@ export function LoginPage() {
             <div className="flex flex-wrap gap-2">
               {SAMPLE_ACCOUNTS.map((s) => (
                 <button
-                  key={s.email}
+                  key={s.username}
                   type="button"
-                  onClick={() => fillSample(s.email)}
+                  onClick={() => fillSample(s.username)}
                   className="rounded-lg bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200 transition hover:bg-blue-50 hover:text-blue-700"
                 >
-                  {s.name} · {s.email}
+                  {s.name} · {s.username}
                 </button>
               ))}
             </div>

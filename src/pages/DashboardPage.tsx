@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import {
   Activity,
   AlertTriangle,
@@ -5,8 +6,6 @@ import {
   CheckCircle2,
   Clock,
   FileText,
-  HeartPulse,
-  ShieldCheck,
 } from 'lucide-react'
 import {
   Area,
@@ -50,7 +49,7 @@ function StatCard({
   title: string
   value: string
   description: string
-  icon: React.ReactNode
+  icon: ReactNode
 }) {
   return (
     <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
@@ -99,24 +98,12 @@ export default function DashboardPage() {
         </div>
 
         {/* KPI */}
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 md:grid-cols-2">
           <StatCard
             title="오늘 감지 이벤트"
             value="18건"
             description="AI가 감지한 이상 징후"
             icon={<AlertTriangle className="h-6 w-6" />}
-          />
-          <StatCard
-            title="주의 병원·센터"
-            value="3곳"
-            description="모니터링 강화 필요"
-            icon={<HeartPulse className="h-6 w-6" />}
-          />
-          <StatCard
-            title="정상 운영 병원·센터"
-            value="12곳"
-            description="안정적으로 케어 중"
-            icon={<ShieldCheck className="h-6 w-6" />}
           />
           <StatCard
             title="리포트 생성"
